@@ -44,5 +44,6 @@ publish
 ./upload/fileManager/.*
 ./upload/fileManager/\.*
 ./protected/config/development.php
+protected/config/development.php
 ./protected/runtime/
 

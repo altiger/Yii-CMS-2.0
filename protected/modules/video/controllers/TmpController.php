@@ -18,7 +18,8 @@ class TmpController extends Controller
             'appId'  => $id,
             'secret' => Yii::app()->params->video->facebook['app_secret'],
         ));
-        dump($facebook->api('/me'));
+        dump($id);
+        dump($facebook->api('/'.$id));
         dump($facebook->api('//videos'));
     }
 }
