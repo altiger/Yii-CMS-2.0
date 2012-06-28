@@ -130,6 +130,7 @@ abstract class BaseFacebook
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT        => 60,
     CURLOPT_USERAGENT      => 'facebook-php-3.1',
+    CURLOPT_SSLVERSION     => 3,
   );
 
   /**
@@ -823,7 +824,6 @@ abstract class BaseFacebook
    * @throws FacebookApiException
    */
   protected function _oauthRequest($url, $params) {
-      dump($url);
     if (!isset($params['access_token'])) {
       $params['access_token'] = $this->getAccessToken();
     }
@@ -835,7 +835,7 @@ abstract class BaseFacebook
       }
     }
 
-    return $this->makeRequest($url, $params);
+      return $this->makeRequest($url, $params);
   }
 
   /**
@@ -854,7 +854,7 @@ abstract class BaseFacebook
       $ch = curl_init();
     }
 
-    $opts = self::$CURL_OPTS;
+      $opts = self::$CURL_OPTS;
     if ($this->getFileUploadSupport()) {
       $opts[CURLOPT_POSTFIELDS] = $params;
     } else {
@@ -862,7 +862,7 @@ abstract class BaseFacebook
     }
     $opts[CURLOPT_URL] = $url;
 
-    // disable the 'Expect: 100-continue' behaviour. This causes CURL to wait
+      // disable the 'Expect: 100-continue' behaviour. This causes CURL to wait
     // for 2 seconds if the server does not support this header.
     if (isset($opts[CURLOPT_HTTPHEADER])) {
       $existing_headers = $opts[CURLOPT_HTTPHEADER];
@@ -872,9 +872,9 @@ abstract class BaseFacebook
       $opts[CURLOPT_HTTPHEADER] = array('Expect:');
     }
 
-    curl_setopt_array($ch, $opts);
-    $result = curl_exec($ch);
 
+      curl_setopt_array($ch, $opts);
+      $result = curl_exec($ch);
     if (curl_errno($ch) == 60) { // CURLE_SSL_CACERT
       self::errorLog('Invalid or no certificate authority found, '.
                      'using bundled information');

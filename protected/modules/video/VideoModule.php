@@ -4,7 +4,6 @@ class VideoModule extends WebModule
 {
 	public static $active = true;
 
-
     public static function name()
     {
         return 'Видео';

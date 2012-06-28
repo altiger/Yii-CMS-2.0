@@ -1,0 +1,22 @@
+<?php
+    require_once 'commen.php';
+	
+	require_once '/d1/newsvps1/www/public/cronjob/Vzaar.php';
+	ini_set('display_errors', 1);
+	ini_set('default_socket_timeout',    120);
+	Vzaar::$secret = 'newsademic'; // sandbox.vzaa
+	Vzaar::$token = 'NB9Dw0ukiSDHK6cQydzV4hceaFH1sUVVpVGtMjL0Q';
+	//Vzaar::$useSandbox = false;
+	ini_set('max_execution_time',0);
+	
+	$videoid	=	$_GET['vid'];
+	
+	// fetch videoId from database whose details are empty //
+		// process video id 330022,327442//
+		// encoded failed video id 380377,364900//
+		$videoDetails	=	Vzaar::getVideoDetails($videoid,true); //die;
+		echo "<pre>Video Status : "; print_r($videoDetails->videoStatus); //die;
+		//$lastVideo	=	Vzaar::getVideoList('newsademic', true, 10,FAILED);
+		//print_r($lastVideo); die;
+		//echo $status	= $videoDetails->videoStatus;
+		?>

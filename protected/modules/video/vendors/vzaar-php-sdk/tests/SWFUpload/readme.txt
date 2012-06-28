@@ -1,0 +1,2 @@
+SWF Upload example valid for API 1.0 only, since whole SWFUpload web site went off there are no updates or future
+releases planned for this demo, if you missing some files, you can find it on http://code.google.com/p/swfupload/
