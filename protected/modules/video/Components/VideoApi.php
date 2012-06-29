@@ -15,6 +15,7 @@ class VideoApi extends CApplicationComponent
                 $adapter = Yii::createComponent($config);
                 $this->adapterStorage->insert($adapter, $adapter->priority);
             }
+
         }
         return $this->adapterStorage;
     }
