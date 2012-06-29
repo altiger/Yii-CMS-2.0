@@ -1,6 +1,6 @@
 <?php
-Yii::import('video.components.adapters.BaseVideoUploadAdapter');
-class BlipTvAdapter extends BaseVideoUploadAdapter
+Yii::import('video.components.apis.BaseVideoApi');
+class BlipTvApi extends BaseVideoApi
 {
     public $login;
     public $pass;

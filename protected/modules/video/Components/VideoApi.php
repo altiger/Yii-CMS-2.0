@@ -1,32 +1,32 @@
 <?php
 class VideoApi extends CApplicationComponent
 {
-    public $adapters = array();
+    public $apis = array();
 
-    protected $adapterStorage;
+    protected $apiStorage;
 
-    public function getAdapterStorage()
+    public function getApiStorage()
     {
-        if ($this->adapterStorage == null)
+        if ($this->apiStorage == null)
         {
-            $this->adapterStorage = new SplPriorityQueue();
-            foreach ($this->adapters as $config)
+            $this->apiStorage = new SplPriorityQueue();
+            foreach ($this->apis as $config)
             {
                 $adapter = Yii::createComponent($config);
-                $this->adapterStorage->insert($adapter, $adapter->priority);
+                $this->apiStorage->insert($adapter, $adapter->priority);
             }
 
         }
-        return $this->adapterStorage;
+        return $this->apiStorage;
     }
 
-    public function getAdapter($model)
+    public function getApi($model)
     {
-        foreach ($this->getAdapterStorage() as $adapter)
+        foreach ($this->getApiStorage() as $api)
         {
-            if ($adapter->canSave($model))
+            if ($api->canSave($model))
             {
-                return $adapter;
+                return $api;
             }
         }
         return null;
@@ -34,9 +34,9 @@ class VideoApi extends CApplicationComponent
 
     public function save($model)
     {
-        $adapter = $this->getAdapter($model);
-        $model->adapter = get_class($adapter);
-        return $adapter->save($model);
+        $api = $this->getApi($model);
+        $model->api = get_class($api);
+        return $api->save($model);
     }
 
 }

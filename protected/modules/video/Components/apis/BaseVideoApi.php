@@ -1,5 +1,5 @@
 <?php
-abstract class BaseVideoUploadAdapter extends CComponent
+abstract class BaseVideoApi extends CComponent
 {
     public $priority;
 
