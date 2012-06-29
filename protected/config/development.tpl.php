@@ -25,13 +25,5 @@ return array_merge_recursive(require('main.php'), array(
 //                )
             ),
         ),
-    ),
-    'params' => array(
-        'video' => array(
-            'facebook' => array(
-                'app_id' => '250094481767132',
-                'app_secret' => '06631a787320a4e62f3e59f60afe4472',
-            )
-        )
     )
 ));
