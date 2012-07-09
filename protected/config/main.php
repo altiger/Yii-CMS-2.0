@@ -13,7 +13,6 @@ foreach ($modules_dirs as $module)
 }
 return array(
     'language' => 'ru',
-    'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
     'name'     => '',
     'preload'  => array('log'),
     'import'   => array(
@@ -110,12 +109,10 @@ return array(
             'showScriptName' => false,
             'class'          => 'UrlManager'
         ),
-
         'errorHandler' => array(
 //            'class' => 'application.components.ErrorHandler',
             'errorAction' => 'main/main/error',
         ),
-
         'authManager'  => array(
             'class' => 'DbAuthManager'
         ),

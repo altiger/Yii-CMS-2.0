@@ -1,8 +1,7 @@
 <?
-
 class SocialModule extends WebModule
 {
-	public static $active = true;
+	public static $active = false;
 
     public $icon = 'user';
 

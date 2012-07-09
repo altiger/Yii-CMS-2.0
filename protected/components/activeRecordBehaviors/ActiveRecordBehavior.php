@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for AR behavior, incapsulate some additional events
  */
