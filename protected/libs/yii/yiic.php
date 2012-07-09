@@ -35,6 +35,16 @@ defined('CONFIG') || define('CONFIG', $env);
 
 $config = $_SERVER['DOCUMENT_ROOT'].'/protected/config/console.php';
 
+define('DS', DIRECTORY_SEPARATOR);
+if (!isset($_SERVER['DOCUMENT_ROOT']) || !$_SERVER['DOCUMENT_ROOT'])
+{
+    $_SERVER['DOCUMENT_ROOT'] = realpath(dirname(__FILE__).'/../../../') . DS;
+}
+
+$env = YII_DEBUG ? 'development' : 'production';
+defined('ENV') || define('ENV', $env);
+
+$config = $_SERVER['DOCUMENT_ROOT'].'/protected/config/console.php';
 if(isset($config))
 {
 	$app=Yii::createConsoleApplication($config);
