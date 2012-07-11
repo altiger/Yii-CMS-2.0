@@ -105,7 +105,7 @@ abstract class CBaseListView extends CWidget
 		if($this->dataProvider===null)
 			throw new CException(Yii::t('zii','The "dataProvider" property cannot be empty.'));
 
-		$this->dataProvider->getData();
+//		$this->dataProvider->getData();
 
 		$this->htmlOptions['id']=$this->getId();
 
