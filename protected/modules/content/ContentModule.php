@@ -65,4 +65,10 @@ class ContentModule extends WebModule
         $upload_dir = Yii::getPathOfAlias('webroot.upload.pages');
         is_dir($upload_dir) or @mkdir($upload_dir, 755);
     }
+
+    public function getSqlForSearchData()
+    {
+        return array('content'=>Yii::app()->db->createCommand('SELECT CONCAT("page_", id) as id, user_id, pages.title, pages.text FROM pages'));
+    }
 }
+

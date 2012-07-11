@@ -4,8 +4,8 @@ class SphinxConf extends CConsoleCommand
     public $basePath = 'application.runtime.sphinx';
     public $targetPath = 'application.runtime.sphinx';
 
-    public $indexer = 'E:/tools/sphinx/indexer.exe';
-    public $searchd = 'E:/tools/sphinx/searchd.exe';
+    public $indexer = 'E:/tools/sphinx/indexer';
+    public $searchd = 'E:/tools/sphinx/searchd';
 
     public function run()
     {
@@ -16,19 +16,79 @@ class SphinxConf extends CConsoleCommand
 
     private function buildDbViews()
     {
+        $res = array();
+        foreach (Yii::app()->getModules() as $id => $module)
+        {
+            $module = Yii::app()->getModule($id);
+            if (!method_exists($module, 'getSqlForSearchData'))
+            {
+                continue;
+            }
+            $data = $module->getSqlForSearchData();
+            foreach ($data as $index => $sql)
+            {
+                $res[$index][] = $sql;
+            }
+        }
 
+        foreach ($res as $index => $commands)
+        {
+            $sqls = $this->prepareCommands($commands);
+            $union = "\n(\n".implode("\n) UNION (\n",$sqls) . ')';
+            $sql = 'CREATE OR REPLACE VIEW sphinx_view_'.$index.' AS '.$union;
+            Yii::app()->db->createCommand($sql)->execute();
+        }
+    }
+
+    private function prepareCommands($commands)
+    {
+        $sqls = array();
+        $all_fields = array();
+        $results = new SplObjectStorage();
+
+        // read first row of all queries for collecting all_fields
+        /** @var $command CDbCommand */
+        foreach ($commands as $command)
+        {
+            /** @var $a CDbDataReader */
+            $fields = array_keys($command->queryRow());
+            $results[$command] = $fields;
+            $all_fields = array_merge($all_fields, $fields);
+        }
+        $all_fields = array_unique($fields);
+
+        //add null columns for all commands
+        foreach ($commands as $command)
+        {
+            $fields = $results[$command];
+            for ($i = 0; $i < count($fields); $i++)
+            {
+                if ($fields[$i] != $all_fields[$i])
+                {
+                    $fields = array_splice($fields, $i, 0, $all_fields[$i]);
+                }
+            }
+
+            $sqls[] = $command->getText();
+        }
+        return $sqls;
     }
 
     private function runSphinx($config_file)
     {
+        //stop daemon
+//        system("{$this->searchd} --stop --config $config_file");
+
+        //reindex
+        system("{$this->indexer} --config $config_file --all --rotate");
+die;
+        //run daemon
         $searchd = "{$this->searchd} --config $config_file";
 
         //TODO: why at WIN on first run server - cmd stay wait???
         $is_win = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
         //run server
-        echo $is_win ? exec("start /b $searchd") : exec("$searchd &");
-        //reindex
-        echo system("{$this->indexer} --config $config_file --all --rotate");
+        $is_win ? system("start /b $searchd") : exec("$searchd &");
     }
 
     private function getConfig()
