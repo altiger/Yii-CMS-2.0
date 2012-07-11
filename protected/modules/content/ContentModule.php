@@ -78,5 +78,11 @@ class ContentModule extends WebModule
             )
         );
     }
+
+    public function getSqlForSearchData()
+    {
+        return array('content'=>Yii::app()->db->createCommand('SELECT CONCAT("page_", id) as id, user_id, pages.title, pages.text FROM pages'));
+    }
 }
+
 
