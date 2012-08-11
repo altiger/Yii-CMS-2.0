@@ -67,9 +67,15 @@ class ContentModule extends WebModule
         is_dir($upload_dir) or @mkdir($upload_dir, 755);
     }
 
-    public function getSqlForSearchData()
+
+    public function getSearchInfo()
     {
-        return array('content'=>Yii::app()->db->createCommand('SELECT CONCAT("page_", id) as id, user_id, pages.title, pages.text FROM pages'));
+        $page = new Page;
+        return array(
+            'content'=> array(
+                $page->forSearch()
+            )
+        );
     }
 }
 

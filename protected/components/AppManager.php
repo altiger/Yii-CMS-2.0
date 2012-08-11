@@ -12,19 +12,41 @@ class AppManager
 
     public static function init()
     {
-        //init PathOfAliaces
-        foreach (self::$pathAliaces as $short => $full)
-        {
-            Yii::setPathOfAlias($short, Yii::getPathOfAlias($full));
-        }
-
-        //init modules
+        self::initPathOfAliaces();
         foreach (Yii::app()->getModules() as $module => $config)
         {
             Yii::app()->getModule($module);
         }
-
         Yii::app()->urlManager->collectRules();
+    }
+
+
+    public static function initPathOfAliaces()
+    {
+        if (Yii::app() instanceof CConsoleApplication)
+        {
+            self::configureCommandRunner();
+        }
+
+        foreach (self::$pathAliaces as $short => $full)
+        {
+            Yii::setPathOfAlias($short, Yii::getPathOfAlias($full));
+        }
+        Yii::app()->urlManager->collectRules();
+    }
+
+    public static function configureCommandRunner(CConsoleCommandRunner $runner = null)
+    {
+        if ($runner === null)
+        {
+            $runner = Yii::app()->getCommandRunner();
+        }
+        $runner->addCommands(Yii::getPathOfAlias('system.cli.commands'));
+        foreach (Yii::app()->getModules() as $id => $conf)
+        {
+            $runner->addCommands(Yii::getPathOfAlias($id.'.commands'));
+        }
+        $runner->commands['migrate'] = Yii::getPathOfAlias('application.commands.ExtendMigrateCommand').'.php';
     }
 
 
