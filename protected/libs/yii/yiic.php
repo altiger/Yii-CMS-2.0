@@ -45,15 +45,9 @@ $env = YII_DEBUG ? 'development' : 'production';
 defined('ENV') || define('ENV', $env);
 
 $config = $_SERVER['DOCUMENT_ROOT'].'/protected/config/console.php';
-if(isset($config))
-{
-	$app=Yii::createConsoleApplication($config);
-	$app->commandRunner->addCommands(YII_PATH.'/cli/commands');
-	$env=@getenv('YII_CONSOLE_COMMANDS');
-	if(!empty($env))
-		$app->commandRunner->addCommands($env);
-}
-else
-	$app=Yii::createConsoleApplication(array('basePath'=>dirname(__FILE__).'/cli'));
+$app=Yii::createConsoleApplication($config);
+$env=@getenv('YII_CONSOLE_COMMANDS');
+if(!empty($env))
+    $app->commandRunner->addCommands($env);
 
 $app->run();
