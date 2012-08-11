@@ -106,8 +106,13 @@ class MainModule extends WebModule
     }
 
 
-    public function getSqlForSearchData()
+    public function getSearchInfo()
     {
-        return array('content'=>Yii::app()->db->createCommand('SELECT CONCAT("news_", id) as id, null as user_id, news.title, news.text FROM news'));
+        $page = new Page;
+        return array(
+            'content'=> array(
+                $page->forSearch(1)
+            )
+        );
     }
 }

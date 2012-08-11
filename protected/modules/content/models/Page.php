@@ -1,4 +1,5 @@
 <?
+
 class Page extends ActiveRecord
 {
     const PAGE_SIZE = 20;
@@ -170,6 +171,7 @@ class Page extends ActiveRecord
             'select' => array(
                 'CONCAT("page_", id) as id',
                 "{$alias}.title",
+                "{$alias}.text"
             )
         ));
         if ($a)
@@ -180,12 +182,6 @@ class Page extends ActiveRecord
                 )
             ));
         }
-        $this->getDbCriteria()->mergeWith(array(
-            'select' => array(
-                "{$alias}.text"
-            )
-        ));
-
         return $this;
     }
 
