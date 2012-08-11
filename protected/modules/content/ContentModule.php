@@ -22,14 +22,14 @@ class ContentModule extends WebModule
     }
 
 
-	public function init()
-	{
+    public function init()
+    {
 
-		$this->setImport(array(
-			'content.models.*',
-			'content.portlets.*',
-		));
-	}
+        $this->setImport(array(
+            'content.models.*',
+            'content.portlets.*',
+        ));
+    }
 
 
     public function adminMenu()
@@ -48,16 +48,17 @@ class ContentModule extends WebModule
     public function routes()
     {
         $routes = array(
-            '/'                          => 'content/page/index',
-            '/page/<id:\d+>'             => 'content/page/view',
-            '/page/create'               => 'content/page/create',
-            '/page/update/<id:\d+>'      => 'content/page/update',
-            '/page/user/<user_id:\d+>/*' => 'content/page/userPages',
+            '/'                                  => 'content/page/index',
+            '/page/<id:\d+>'                     => 'content/page/view',
+            '/page/create'                       => 'content/page/create',
+            '/page/update/<id:\d+>'              => 'content/page/update',
+            '/page/user/<user_id:\d+>/*'         => 'content/page/userPages',
             '/page/section/<section_id:\d+>/*'   => 'content/page/sectionPages'
         );
 
         return $routes;
     }
+
 
     public function install()
     {
@@ -66,9 +67,15 @@ class ContentModule extends WebModule
         is_dir($upload_dir) or @mkdir($upload_dir, 755);
     }
 
-    public function getSqlForSearchData()
+
+    public function getSearchInfo()
     {
-        return array('content'=>Yii::app()->db->createCommand('SELECT CONCAT("page_", id) as id, user_id, pages.title, pages.text FROM pages'));
+        $page = new Page;
+        return array(
+            'content'=> array(
+                $page->forSearch()
+            )
+        );
     }
 }
 

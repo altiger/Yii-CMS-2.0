@@ -87,16 +87,21 @@ class MainModule extends WebModule
     public function routes()
     {
         return array(
-            'off'        => 'main/main/off',
-            'admin'      => 'main/mainAdmin/index',
+            'off'         => 'main/main/off',
+            'admin'       => 'main/mainAdmin/index',
             'sitemap'     => 'main/help/sitemap',
             'sitemap.xml' => 'main/help/sitemapxml'
         );
     }
 
 
-    public function getSqlForSearchData()
+    public function getSearchInfo()
     {
-        return array('content'=>Yii::app()->db->createCommand('SELECT CONCAT("news_", id) as id, null as user_id, news.title, news.text FROM news'));
+        $page = new Page;
+        return array(
+            'content'=> array(
+                $page->forSearch(1)
+            )
+        );
     }
 }

@@ -9,15 +9,7 @@ class CommandExecutor extends CApplicationComponent
     public function init()
     {
         $this->runner = new CConsoleCommandRunner();
-
-        $this->addCommands('system.cli.commands');
-        foreach (Yii::app()->getModules() as $id => $conf)
-        {
-            $this->addCommands($id.'.commands');
-        }
-        $this->runner->commands['migrate'] = Yii::getPathOfAlias('application.commands.ExtendMigrateCommand').'.php';
-
-        parent::init();
+        AppManager::configureCommandRunner($this->runner);
     }
 
     public function __call($name, $params)
