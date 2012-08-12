@@ -8,6 +8,8 @@ class SphinxConfCommand extends CConsoleCommand
     public $searchd = 'E:/tools/sphinx/searchd';
 
 
+    public $runSearchd = false;
+
     public function run()
     {
         $this->buildDbViews();
@@ -39,10 +41,9 @@ class SphinxConfCommand extends CConsoleCommand
 
         foreach ($res as $index => $models)
         {
-            $sqls = $this->prepareCommands($models);
+            $sqls  = $this->prepareCommands($models);
             $union = "\n(\n" . implode("\n) UNION (\n", $sqls) . ')';
             $sql   = 'CREATE OR REPLACE VIEW sphinx_view_' . $index . ' AS ' . $union;
-            stop($sql);
             Yii::app()->db->createCommand($sql)->execute();
         }
     }
@@ -59,7 +60,7 @@ class SphinxConfCommand extends CConsoleCommand
         foreach ($models as $model)
         {
             /** @var $a CDbDataReader */
-            $fields            = $this->getColumns($model);
+            $fields          = $this->getColumns($model);
             $results[$model] = $fields;
             $all_fields      = array_merge($fields, $all_fields);
         }
@@ -81,33 +82,29 @@ class SphinxConfCommand extends CConsoleCommand
                 }
                 else
                 {
-                    $newFields[] =  'null as '.$f;
+                    $newFields[] = 'null as ' . $f;
                 }
             }
             $model->getDbCriteria()->select = $newFields;
             //get sql by criteria
-            $sqls[] = Yii::app()->db->commandBuilder->createFindCommand($model->tableName(), $model->getDbCriteria())->getText();
+            $sqls[] = Yii::app()->db->commandBuilder
+                ->createFindCommand($model->tableName(), $model->getDbCriteria())->getText();
         }
 
         return $sqls;
     }
 
-
     private function runSphinx($config_file)
     {
-        //stop daemon
-//        system("{$this->searchd} --stop --config $config_file");
-
+        if ($this->runSearchd)
+        {
+            $c = "{$this->searchd} --config $config_file";
+            $is_win = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+            $c = $is_win ? 'start ' . $c : $c . ' &';
+            system($c);
+        }
         //reindex
         system("{$this->indexer} --config $config_file --all --rotate");
-        die;
-        //run daemon
-        $searchd = "{$this->searchd} --config $config_file";
-
-        //TODO: why at WIN on first run server - cmd stay wait???
-        $is_win = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-        //run server
-        $is_win ? system("start /b $searchd") : exec("$searchd &");
     }
 
 
@@ -144,7 +141,8 @@ class SphinxConfCommand extends CConsoleCommand
 
     public function getColumns($model)
     {
-        $command = Yii::app()->db->commandBuilder->createFindCommand($model->tableName(), $model->getDbCriteria());
+        $command = Yii::app()->db->commandBuilder->createFindCommand($model->tableName(),
+            $model->getDbCriteria());
         Yii::app()->db->createCommand('DROP TABLE IF EXISTS __a')->execute();
         Yii::app()->db->createCommand(
             'CREATE TEMPORARY TABLE IF NOT EXISTS __a (' . $command->getText() . ');')->execute();
