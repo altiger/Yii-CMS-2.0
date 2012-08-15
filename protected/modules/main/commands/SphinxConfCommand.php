@@ -103,6 +103,7 @@ class SphinxConfCommand extends CConsoleCommand
             $c = $is_win ? 'start ' . $c : $c . ' &';
             system($c);
         }
+
         //reindex
         system("{$this->indexer} --config $config_file --all --rotate");
     }
