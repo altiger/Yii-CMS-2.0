@@ -12,10 +12,10 @@ foreach ($modules_dirs as $module)
     $modules[] = $module;
 }
 return array(
-    'language' => 'ru',
-    'name'     => '',
-    'preload'  => array('log'),
-    'import'   => array(
+    'language'       => 'ru',
+    'name'           => '',
+    'preload'        => array('log'),
+    'import'         => array(
         'application.components.*',
         'application.components.interfaces.*',
         'application.components.Form',
@@ -29,43 +29,49 @@ return array(
         'application.libs.helpers.*',
         'application.extensions.yiidebugtb.*',
     ),
-    'modules'    => $modules,
-    'components' => array(
-        'executor' => array(
+    'modules'        => $modules,
+    'components'     => array(
+        'executor'     => array(
             'class' => 'application.components.CommandExecutor',
         ),
-        'messages' => array(
-            'class' => 'CDbMessageSource',
+        'messages'     => array(
+            'class'                  => 'CDbMessageSource',
             'sourceMessageTable'     => 'languages_messages',
             'translatedMessageTable' => 'languages_translations'
         ),
-        'bootstrap'=>array(
-            'class'=>'application.components.bootstrap.components.Bootstrap'
+        'bootstrap'    => array(
+            'class'=> 'application.components.bootstrap.components.Bootstrap'
         ),
         'assetManager' => array(
-            'class' => 'AssetManager',
-            'parsers' => array(
+            'class'       => 'AssetManager',
+            'parsers'     => array(
                 'sass' => array( // key == the type of file to parse
-                    'class' => 'ext.assetManager.Sass', // path alias to the parser
-                    'output' => 'css', // the file type it is parsed to
+                    'class'   => 'ext.assetManager.Sass',
+                    // path alias to the parser
+                    'output'  => 'css',
+                    // the file type it is parsed to
                     'options' => array(
                         'syntax' => 'sass'
                     )
                 ),
                 'scss' => array( // key == the type of file to parse
-                    'class' => 'ext.assetManager.Sass', // path alias to the parser
-                    'output' => 'css', // the file type it is parsed to
+                    'class'   => 'ext.assetManager.Sass',
+                    // path alias to the parser
+                    'output'  => 'css',
+                    // the file type it is parsed to
                     'options' => array(
                         'syntax' => 'scss',
-                        'style' => 'compressed'
+                        'style'  => 'compressed'
                     )
                 ),
                 'less' => array( // key == the type of file to parse
-                    'class' => 'ext.assetManager.Less', // path alias to the parser
-                    'output' => 'css', // the file type it is parsed to
+                    'class'   => 'ext.assetManager.Less',
+                    // path alias to the parser
+                    'output'  => 'css',
+                    // the file type it is parsed to
                     'options' => array(
                         'syntax' => 'scss',
-                        'style' => 'compressed'
+                        'style'  => 'compressed'
                     )
                 ),
             ),
@@ -75,8 +81,7 @@ return array(
         'clientScript' => array(
             'class'    => 'CClientScript',
         ),
-        'session'      => array(
-//            'autoStart'=> true
+        'session'      => array(//            'autoStart'=> true
         ),
         'user'         => array(
             'allowAutoLogin' => true,
@@ -95,14 +100,14 @@ return array(
         'text'         => array(
             'class' => 'application.components.TextComponent'
         ),
-        'request' => array(
-            'class' => 'HttpRequest',
-            'enableCsrfValidation' => false,
+        'request'      => array(
+            'class'                  => 'HttpRequest',
+            'enableCsrfValidation'   => false,
             'noCsrfValidationRoutes' => array(
                 '^services/api/soap.*$',
                 '^services/api/json.*$',
             ),
-            'csrfTokenName' => 'token',
+            'csrfTokenName'          => 'token',
         ),
         'urlManager'   => array(
             'urlFormat'      => 'path',
@@ -110,27 +115,43 @@ return array(
             'class'          => 'UrlManager'
         ),
         'errorHandler' => array(
-//            'class' => 'application.components.ErrorHandler',
+            'class'       => 'application.components.ErrorHandler',
             'errorAction' => 'main/main/error',
         ),
         'authManager'  => array(
             'class' => 'DbAuthManager'
         ),
-        'cache' => array(
-            'class'=>'system.caching.CFileCache',
+        'cache'        => array(
+            'class'=> 'system.caching.CFileCache',
         ),
-        'log'=>array(
-            'class'=>'CLogRouter',
-            'routes'=>array(),
+        'search'       => array(
+            'class'            => 'ext.DGSphinxSearch.DGSphinxSearch',
+            'server'           => '127.0.0.1',
+            'port'             => 9312,
+            'maxQueryTime'     => 3000,
+            'enableProfiling'  => 0,
+            'enableResultTrace'=> 0,
+            'fieldWeights'     => array(
+                'name'     => 10000,
+                'keywords' => 100,
+            ),
+        ),
+        'log'          => array(
+            'class' => 'CLogRouter',
+            'routes'=> array(),
         ),
     ),
 
-    'onBeginRequest' => array('AppManager', 'init'),
-    'params' => array(
+    'onBeginRequest' => array(
+        'AppManager',
+        'init'
+    ),
+    'params'         => array(
         'save_site_actions'           => true,
         'multilanguage_support'       => false,
         'collect_routes_from_modules' => true,
         'themes_enabled'              => false,
-        'salt'                        => 'some_secret_key', // substr(str_replace('+', '.', base64_encode(sha1(microtime(true), true))), 0, 22)
+        'salt'                        => 'some_secret_key',
+        // substr(str_replace('+', '.', base64_encode(sha1(microtime(true), true))), 0, 22)
     )
 );
