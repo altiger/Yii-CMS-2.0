@@ -78,4 +78,3 @@ class ContentModule extends WebModule
         );
     }
 }
-
