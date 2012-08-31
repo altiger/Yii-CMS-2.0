@@ -32,3 +32,4 @@ class RbacFilter extends CFilter
         }
     }
 }
+
