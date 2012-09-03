@@ -144,6 +144,9 @@ class PageController extends Controller
     public function actionIndex()
     {
         dump(Yii::app()->search->select('*')->from('content')->limit(0,3)->search(),0,9);
+        dump(Yii::app()->search->select('*')->from('content')->limit(0,3)->search(),0,9);
+        $this->page_title = '';
+
         $data_provider = new CActiveDataProvider('Page', array(
             'criteria' => array(
                 'condition' => "status = '" . Page::STATUS_PUBLISHED . "'",

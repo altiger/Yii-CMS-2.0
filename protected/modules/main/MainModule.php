@@ -104,15 +104,4 @@ class MainModule extends WebModule
             )
         );
     }
-
-
-    public function getSearchInfo()
-    {
-        $page = new Page;
-        return array(
-            'content'=> array(
-                $page->forSearch(1)
-            )
-        );
-    }
 }
